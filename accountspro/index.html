@@ -559,7 +559,7 @@ footer a:hover{color:#fff}
     for(var q=0;q<3;q++)tintNow[q]+=(tintTo[q]-tintNow[q])*.06;
     var tc='rgb('+(tintNow[0]|0)+','+(tintNow[1]|0)+','+(tintNow[2]|0)+')';
     gx.clearRect(0,0,S,H);
-    var g=gx.createRadialGradient(cx-R*.3,cy-R*.35,R*.1,cx,cy,R);g.addColorStop(0,'rgba(40,110,210,.38)');g.addColorStop(1,'rgba(12,40,80,.2)');
+    var g=gx.createRadialGradient(cx-R*.3,cy-R*.35,R*.1,cx,cy,R);g.addColorStop(0,'rgba(30,88,176,.5)');g.addColorStop(1,'rgba(8,28,58,.52)');
     gx.fillStyle=g;gx.beginPath();gx.arc(cx,cy,R,0,6.283);gx.fill();
     
     var c0=Math.cos(camLon*D2R),s0=Math.sin(camLon*D2R),cp=Math.cos(camLat*D2R),sp=Math.sin(camLat*D2R),u0=R/230;

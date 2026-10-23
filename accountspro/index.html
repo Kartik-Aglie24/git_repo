@@ -89,8 +89,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @keyframes wout{to{transform:translateY(-.35em);opacity:0}}
 @keyframes win{from{transform:translateY(.4em);opacity:0}to{transform:none;opacity:1}}
 .stage{position:relative;aspect-ratio:1/.98;max-width:520px;width:100%;justify-self:end}
-.stage::before{content:"";position:absolute;inset:-6% -10%;background:radial-gradient(closest-side at 50% 42%,rgba(11,30,46,.78),rgba(11,30,46,.45) 60%,rgba(11,30,46,0));pointer-events:none}
-.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stage::before{content:"";position:absolute;inset:-6% -10%;background:radial-gradient(closest-side at 50% 42%,rgba(5,16,30,.9),rgba(5,16,30,.6) 62%,rgba(5,16,30,0));pointer-events:none}
+.stage canvas{position:absolute;left:0;top:-14%;width:100%;height:114%}
 .stage::after{content:"";position:absolute;left:-25%;right:-25%;bottom:-12%;height:62%;background:radial-gradient(closest-side at 50% 78%,rgba(11,30,46,.85),rgba(11,30,46,.5) 55%,rgba(11,30,46,0));pointer-events:none}
 .gpanel{position:absolute;left:0;right:0;bottom:0;z-index:2;text-align:center;text-shadow:0 1px 14px rgba(0,0,0,.5)}
 .gpanel p{text-wrap:balance;margin:0 auto;font-size:17px;line-height:1.5;color:#fff;max-width:36ch;min-height:3em}
@@ -344,7 +344,7 @@ footer a:hover{color:#fff}
     </div>
     <div class="stage in-up" style="animation-delay:.2s" aria-hidden="true">
       <canvas id="globe"></canvas>
-      <div class="gpanel" id="gpanel"><p id="gt">Recruiters across time zones in the United States.</p></div>
+      <div class="gpanel" id="gpanel"><p id="gt">US employers hire faster with recruiters who know their field.</p></div>
     </div>
   </div>
 
@@ -526,25 +526,25 @@ footer a:hover{color:#fff}
   Object.keys(cities).forEach(function(k){cities[k].v=vec(cities[k][1],cities[k][2])});
   var routes=[['ny','bl',0],['au','hy',.33],['sj','pn',.66]].map(function(r){
     var a=cities[r[0]].v,b=cities[r[1]].v,om=Math.acos(a[0]*b[0]+a[1]*b[1]+a[2]*b[2]),pts=[];
-    for(var s=0;s<=64;s++){var t=s/64,k1=Math.sin((1-t)*om)/Math.sin(om),k2=Math.sin(t*om)/Math.sin(om),lift=1+.3*Math.sin(Math.PI*t);
+    for(var s=0;s<=64;s++){var t=s/64,k1=Math.sin((1-t)*om)/Math.sin(om),k2=Math.sin(t*om)/Math.sin(om),lift=1+.16*Math.sin(Math.PI*t);
       pts.push([(a[0]*k1+b[0]*k2)*lift,(a[1]*k1+b[1]*k2)*lift,(a[2]*k1+b[2]*k2)*lift])}
     return {p:pts,off:r[2]}});
   var gcv=$('#globe'), gx=gcv.getContext('2d'), S=0, H=0, vis=true, dpr=Math.min(window.devicePixelRatio||1,2);
   function gsize(){var r=gcv.getBoundingClientRect();S=r.width;H=r.height;gcv.width=S*dpr;gcv.height=H*dpr;gx.setTransform(dpr,0,0,dpr,0,0)}
   var stops=[
-    {lon:-98,lat:24,k:'United States',t:'Recruiters across time zones in the United States.',keys:['ny','au','sj']},
-    {lon:78,lat:16,k:'India and offshore',t:'Building teams in India and offshore, backed by US account management.',keys:['bl','hy','pn']}];
+    {lon:-98,lat:24,k:'United States',t:'US employers hire faster with recruiters who know their field.',keys:['ny','au','sj']},
+    {lon:78,lat:16,k:'India and offshore',t:'India and offshore teams, ready to work in your time zone.',keys:['bl','hy','pn']}];
   var HOLD=4200, MOVE=2400, camLon=-98, camLat=24, stopI=0, phase='hold', ph0=performance.now(), fromLon=-98, toLon=-98, fromLat=24, toLat=24, focusI=0, panelDone=true;
   function ease(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2}
   function setText(i){var p=$('#gt');p.textContent=stops[i].t;p.classList.remove('sw');void p.offsetWidth;p.classList.add('sw')}
   function startMove(i,now){phase='move';ph0=now;fromLon=camLon;fromLat=camLat;stopI=i;var d=((stops[i].lon-fromLon)%360+360)%360;if(d<60)d+=360;toLon=fromLon+d;toLat=stops[i].lat;focusI=i;panelDone=false}
-  var tintNow=[141,184,242], tintTo=[141,184,242];
+  var tintNow=[125,184,255], tintTo=[125,184,255];
   function hex(h){return [parseInt(h.substr(1,2),16),parseInt(h.substr(3,2),16),parseInt(h.substr(5,2),16)]}
   function proj(x,y,z,lon0,lat0){
     var c0=Math.cos(lon0*D2R),s0=Math.sin(lon0*D2R),cp=Math.cos(lat0*D2R),sp=Math.sin(lat0*D2R);
     var x1=x*c0-z*s0, z1=x*s0+z*c0;return [x1,y*cp-z1*sp,y*sp+z1*cp]}
   function draw(now){
-    var R=Math.min(S,H)*.35, cx=S/2, cy=H*.37;
+    var R=Math.min(S,H)*.342, cx=S/2, cy=H*.469;
     if(!reduce){
       var el=now-ph0;
       if(phase==='hold'){
@@ -559,28 +559,28 @@ footer a:hover{color:#fff}
     for(var q=0;q<3;q++)tintNow[q]+=(tintTo[q]-tintNow[q])*.06;
     var tc='rgb('+(tintNow[0]|0)+','+(tintNow[1]|0)+','+(tintNow[2]|0)+')';
     gx.clearRect(0,0,S,H);
-    var g=gx.createRadialGradient(cx-R*.3,cy-R*.35,R*.1,cx,cy,R);g.addColorStop(0,'rgba(40,110,210,.34)');g.addColorStop(1,'rgba(12,40,80,.14)');
+    var g=gx.createRadialGradient(cx-R*.3,cy-R*.35,R*.1,cx,cy,R);g.addColorStop(0,'rgba(22,62,124,.9)');g.addColorStop(.7,'rgba(8,26,50,.94)');g.addColorStop(1,'rgba(4,14,28,.96)');
     gx.fillStyle=g;gx.beginPath();gx.arc(cx,cy,R,0,6.283);gx.fill();
-    gx.strokeStyle='rgba(141,184,242,.32)';gx.lineWidth=1;gx.beginPath();gx.arc(cx,cy,R,0,6.283);gx.stroke();
+    gx.strokeStyle='rgba(90,160,255,.22)';gx.lineWidth=7;gx.beginPath();gx.arc(cx,cy,R+1,0,6.283);gx.stroke();gx.strokeStyle='rgba(190,222,255,.85)';gx.lineWidth=1.6;gx.beginPath();gx.arc(cx,cy,R,0,6.283);gx.stroke();
     var c0=Math.cos(camLon*D2R),s0=Math.sin(camLon*D2R),cp=Math.cos(camLat*D2R),sp=Math.sin(camLat*D2R),u0=R/230;
     for(var i=0;i<N;i++){
       var x=GX[i],y=GY[i],z=GZ[i],x1=x*c0-z*s0,z1=x*s0+z*c0,y2=y*cp-z1*sp,z2=y*sp+z1*cp;
       if(z2<=0.02)continue;
       var t=GT[i],sx=cx+x1*R,sy=cy-y2*R;
-      if(t){gx.fillStyle=tc;gx.globalAlpha=.6+.4*z2;gx.beginPath();gx.arc(sx,sy,(1.3+1.1*z2)*u0*1.15,0,6.283);gx.fill()}
-      else{gx.fillStyle='#BCD3F0';gx.globalAlpha=.2+.55*z2;gx.beginPath();gx.arc(sx,sy,(.9+.9*z2)*u0,0,6.283);gx.fill()}
+      if(t){gx.fillStyle=tc;gx.globalAlpha=.9+.1*z2;gx.beginPath();gx.arc(sx,sy,(1.6+1.3*z2)*u0*1.2,0,6.283);gx.fill()}
+      else{gx.fillStyle='#E4F0FF';gx.globalAlpha=.38+.62*z2;gx.beginPath();gx.arc(sx,sy,(1.0+1.0*z2)*u0*1.1,0,6.283);gx.fill()}
     }
     gx.globalAlpha=1;
     routes.forEach(function(r){
-      var prev=null;gx.lineWidth=1.3;
+      var prev=null;gx.lineWidth=2.1;gx.shadowColor=tc;gx.shadowBlur=9;
       for(var s=0;s<r.p.length;s++){
         var p=r.p[s],o=proj(p[0],p[1],p[2],camLon,camLat),ok=o[2]>0||(o[0]*o[0]+o[1]*o[1])>1.02,pt=[cx+o[0]*R,cy-o[1]*R,ok];
-        if(prev&&prev[2]&&pt[2]){gx.strokeStyle=tc;gx.globalAlpha=.6;gx.beginPath();gx.moveTo(prev[0],prev[1]);gx.lineTo(pt[0],pt[1]);gx.stroke()}
+        if(prev&&prev[2]&&pt[2]){gx.strokeStyle=tc;gx.globalAlpha=1;gx.beginPath();gx.moveTo(prev[0],prev[1]);gx.lineTo(pt[0],pt[1]);gx.stroke()}
         prev=pt}
-      gx.globalAlpha=1;
+      gx.globalAlpha=1;gx.shadowBlur=0;
       var h=((now*.00016)+r.off)%1,i0=(h*(r.p.length-1))|0;
       for(var k=10;k>=0;k--){var pk=r.p[Math.max(0,i0-k)],ok2=proj(pk[0],pk[1],pk[2],camLon,camLat);
-        if(ok2[2]>0||(ok2[0]*ok2[0]+ok2[1]*ok2[1])>1.02){gx.fillStyle='rgba(255,255,255,'+(.08+.09*(10-k))+')';gx.beginPath();gx.arc(cx+ok2[0]*R,cy-ok2[1]*R,(1+(10-k)*.22)*u0*1.2,0,6.283);gx.fill()}}
+        if(ok2[2]>0||(ok2[0]*ok2[0]+ok2[1]*ok2[1])>1.02){gx.fillStyle='rgba(255,255,255,'+(.15+.085*(10-k))+')';gx.beginPath();gx.arc(cx+ok2[0]*R,cy-ok2[1]*R,(1.3+(10-k)*.3)*u0*1.3,0,6.283);gx.fill()}}
     });
     var pulse=(now%1800)/1800;
     Object.keys(cities).forEach(function(k){
@@ -593,11 +593,11 @@ footer a:hover{color:#fff}
   }
   function loop(now){if(vis&&!document.hidden)draw(now);requestAnimationFrame(loop)}
   gsize();
-  if(reduce){$('#gt').textContent='Recruiters in the United States and India, with one point of contact for you.';draw(0)}else requestAnimationFrame(loop);
+  if(reduce){$('#gt').textContent='Recruiters in the US and India, with one point of contact for you.';draw(0)}else requestAnimationFrame(loop);
   if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe($('.hero'))}
   window.addEventListener('resize',function(){gsize();if(reduce)draw(0)});
   /* industry word in the headline */
-  var words=[['Technology','#8DB8F2'],['Engineering','#6FD0C4'],['Semiconductor','#B1A2F5'],['BFSI','#F0C76E']],wi=0,sw=$('#sw'),h1=sw.parentNode.parentNode;
+  var words=[['Technology','#7DB8FF'],['Engineering','#5FE0D0'],['Semiconductor','#B9A8FF'],['BFSI','#FFD27A']],wi=0,sw=$('#sw'),h1=sw.parentNode.parentNode;
   if(!reduce){setInterval(function(){
     wi=(wi+1)%words.length;sw.className='out';
     setTimeout(function(){sw.textContent=words[wi][0];h1.style.setProperty('--tint',words[wi][1]);tintTo=hex(words[wi][1]);sw.className='in'},320);

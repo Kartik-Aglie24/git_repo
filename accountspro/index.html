@@ -92,18 +92,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .stage::before{content:"";position:absolute;inset:-6% -10%;background:radial-gradient(closest-side at 50% 42%,rgba(11,30,46,.78),rgba(11,30,46,.45) 60%,rgba(11,30,46,0));pointer-events:none}
 .stage canvas{position:absolute;inset:0;width:100%;height:100%}
 .stage::after{content:"";position:absolute;left:-25%;right:-25%;bottom:-12%;height:62%;background:radial-gradient(closest-side at 50% 78%,rgba(11,30,46,.85),rgba(11,30,46,.5) 55%,rgba(11,30,46,0));pointer-events:none}
-.gpanel{position:absolute;left:2%;right:2%;bottom:0;z-index:2;color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.45)}
-.gtabs{display:flex;gap:10px}
-.gtabs button{position:relative;flex:1;text-align:left;background:none;border:0;border-top:2px solid rgba(255,255,255,.22);padding:12px 0 0;color:rgba(255,255,255,.55);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .3s}
-.gtabs button:hover,.gtabs button.on{color:#fff}
-.gtabs button i{position:absolute;left:0;top:-2px;height:2px;width:0;background:#fff}
-.gtabs button.on i{animation:gprog 6.6s linear forwards}
-@keyframes gprog{to{width:100%}}
-.gpanel p{margin-top:12px;font-size:15px;line-height:1.5;color:#E8F0F7;min-height:3em;max-width:44ch}
+.gpanel{position:absolute;left:0;right:0;bottom:0;z-index:2;text-align:center;text-shadow:0 1px 14px rgba(0,0,0,.5)}
+.gpanel p{text-wrap:balance;margin:0 auto;font-size:17px;line-height:1.5;color:#fff;max-width:36ch;min-height:3em}
 .gpanel p.sw{animation:swap .5s cubic-bezier(.2,.7,.2,1) both}
-.gclk{display:flex;gap:32px;margin-top:10px;font-variant-numeric:tabular-nums}
-.gclk small{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ondark)}
-.gclk b{display:block;margin-top:2px;font-size:22px;font-weight:500;letter-spacing:-.01em;color:#fff}
 .hero .sub{margin-top:26px;font-size:19px;color:var(--ondark);max-width:52ch}
 .hero .cta{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
 .hero .note{margin-top:30px;display:flex;gap:10px;align-items:center;font-size:14px;color:var(--ondark)}
@@ -353,14 +344,7 @@ footer a:hover{color:#fff}
     </div>
     <div class="stage in-up" style="animation-delay:.2s" aria-hidden="true">
       <canvas id="globe"></canvas>
-      <div class="gpanel" id="gpanel">
-        <div class="gtabs" id="gtabs" role="tablist">
-          <button type="button" role="tab" class="on" aria-selected="true">United States<i></i></button>
-          <button type="button" role="tab" aria-selected="false">India and offshore<i></i></button>
-        </div>
-        <p id="gt">Recruiters across time zones for direct hire, contract and payroll.</p>
-        <div class="gclk"><div><small>New York</small><b id="c1">9:00 AM</b></div><div><small>Bengaluru</small><b id="c2">6:30 PM</b></div></div>
-      </div>
+      <div class="gpanel" id="gpanel"><p id="gt">Recruiters across time zones in the United States.</p></div>
     </div>
   </div>
 
@@ -548,15 +532,12 @@ footer a:hover{color:#fff}
   var gcv=$('#globe'), gx=gcv.getContext('2d'), S=0, H=0, vis=true, dpr=Math.min(window.devicePixelRatio||1,2);
   function gsize(){var r=gcv.getBoundingClientRect();S=r.width;H=r.height;gcv.width=S*dpr;gcv.height=H*dpr;gx.setTransform(dpr,0,0,dpr,0,0)}
   var stops=[
-    {lon:-98,lat:24,k:'United States',t:'Recruiters across time zones for direct hire, contract and payroll.',keys:['ny','au','sj']},
-    {lon:78,lat:16,k:'India and offshore',t:'Hire and build teams where the talent is, with US-based account management.',keys:['bl','hy','pn']}];
+    {lon:-98,lat:24,k:'United States',t:'Recruiters across time zones in the United States.',keys:['ny','au','sj']},
+    {lon:78,lat:16,k:'India and offshore',t:'Building teams in India and offshore, backed by US account management.',keys:['bl','hy','pn']}];
   var HOLD=4200, MOVE=2400, camLon=-98, camLat=24, stopI=0, phase='hold', ph0=performance.now(), fromLon=-98, toLon=-98, fromLat=24, toLat=24, focusI=0, panelDone=true;
   function ease(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2}
-  var tabs=$$('#gtabs button');
   function setText(i){var p=$('#gt');p.textContent=stops[i].t;p.classList.remove('sw');void p.offsetWidth;p.classList.add('sw')}
-  function setTab(i){tabs.forEach(function(b,j){b.classList.remove('on');b.setAttribute('aria-selected','false');if(j===i){void b.offsetWidth;b.classList.add('on');b.setAttribute('aria-selected','true')}})}
-  function startMove(i,now){phase='move';ph0=now;fromLon=camLon;fromLat=camLat;stopI=i;var d=((stops[i].lon-fromLon)%360+360)%360;if(d<60)d+=360;toLon=fromLon+d;toLat=stops[i].lat;focusI=i;panelDone=false;setTab(i)}
-  tabs.forEach(function(b,i){b.addEventListener('click',function(){if(!reduce&&i!==stopI)startMove(i,performance.now())})});
+  function startMove(i,now){phase='move';ph0=now;fromLon=camLon;fromLat=camLat;stopI=i;var d=((stops[i].lon-fromLon)%360+360)%360;if(d<60)d+=360;toLon=fromLon+d;toLat=stops[i].lat;focusI=i;panelDone=false}
   var tintNow=[141,184,242], tintTo=[141,184,242];
   function hex(h){return [parseInt(h.substr(1,2),16),parseInt(h.substr(3,2),16),parseInt(h.substr(5,2),16)]}
   function proj(x,y,z,lon0,lat0){
@@ -612,12 +593,9 @@ footer a:hover{color:#fff}
   }
   function loop(now){if(vis&&!document.hidden)draw(now);requestAnimationFrame(loop)}
   gsize();
-  if(reduce){$('#gtabs').style.display='none';$('#gt').textContent='Recruiters in both countries, with one point of contact for you.';draw(0)}else requestAnimationFrame(loop);
+  if(reduce){$('#gt').textContent='Recruiters in the United States and India, with one point of contact for you.';draw(0)}else requestAnimationFrame(loop);
   if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe($('.hero'))}
   window.addEventListener('resize',function(){gsize();if(reduce)draw(0)});
-  function clocks(){try{var f=function(z){return new Intl.DateTimeFormat('en-US',{timeZone:z,hour:'numeric',minute:'2-digit'}).format(new Date())};
-    $('#c1').textContent=f('America/New_York');$('#c2').textContent=f('Asia/Kolkata')}catch(e){}}
-  clocks();setInterval(clocks,20000);
   /* industry word in the headline */
   var words=[['Technology','#8DB8F2'],['Engineering','#6FD0C4'],['Semiconductor','#B1A2F5'],['BFSI','#F0C76E']],wi=0,sw=$('#sw'),h1=sw.parentNode.parentNode;
   if(!reduce){setInterval(function(){
